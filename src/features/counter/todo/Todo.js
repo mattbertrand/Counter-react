@@ -22,6 +22,10 @@ const Todo = () => {
         dispatch(remove(id))
     }
 
+    const handleToggle = (id) => () => {
+        dispatch(toggleComplete(id))
+    }
+
     return (
         <div>
          <form onSubmit={handleSubmit}>
@@ -31,6 +35,7 @@ const Todo = () => {
         {todos.map(todo => (
             <div key={todo.id}>{todo.description} {todo.isComplete ? "DONE" : ""}
             <button onClick={handleDelete(todo.id)}>Delete</button>
+            <button onClick={handleToggle(todo.id)}>Toggle</button>
             </div>
             
         ))} 
