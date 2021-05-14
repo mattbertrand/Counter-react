@@ -9,6 +9,8 @@ import {
 
 const Todo = () => {
     const [inputText, setInputText] = useState('')
+    const [editText, setEditText] = useState('')
+    const [isEditingTodo, setIsEditingTodo] = useState(-1)
     const dispatch = useDispatch()
     const todos = useSelector(state => state.todos)
 
@@ -26,6 +28,20 @@ const Todo = () => {
         dispatch(toggleComplete(id))
     }
 
+    const handleEdit = (id, description) => () => {
+        setIsEditingTodo(id);
+        setEditText(description)
+    }
+
+    const handleUpdate = e => {
+        e.preventDefault();
+
+        dispatch(edit({id: isEditingTodo, description: editText}))
+
+        setIsEditingTodo(-1);
+        setEditText('')
+    }
+
     return (
         <div>
          <form onSubmit={handleSubmit}>
@@ -33,9 +49,23 @@ const Todo = () => {
              <button type="submit">Create New</button>
         </form> 
         {todos.map(todo => (
-            <div key={todo.id}>{todo.description} {todo.isComplete ? "DONE" : ""}
+            <div key={todo.id}>
+                {isEditingTodo === todo.id ? (
+                    <form onSubmit={handleUpdate}>
+                        <input 
+                        onChange={e => setEditText(e.target.value)} 
+                        value={editText} />
+                        <button type="submit">Edit</button>
+                    </form>
+                ) : 
+                <>
+                {todo.description} {todo.isComplete ? "DONE" : ""}
             <button onClick={handleDelete(todo.id)}>Delete</button>
             <button onClick={handleToggle(todo.id)}>Toggle</button>
+            <button onClick={handleEdit(todo.id, todo.description)}>Edit</button>
+                </>
+                }
+                
             </div>
             
         ))} 
