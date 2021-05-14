@@ -47,4 +47,4 @@ export const slice = createSlice ({
 
 export const {create, edit, toggleComplete, remove} = slice.actions
 
-export default slice.reducer
+export default slice.reducer 
